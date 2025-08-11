@@ -2341,7 +2341,6 @@ static inline int nvme_set_features(nvme_link_t l,  __u32 nsid, __u32 cdw11,
 		.cdw13		= cdw13,
 		.cdw14		= cdw14,
 		.cdw15		= cdw15,
-		.timeout_ms	= NVME_DEFAULT_IOCTL_TIMEOUT,
 	};
 
 	return nvme_submit_admin_passthru(l, &cmd, result);
@@ -2968,7 +2967,6 @@ static inline int nvme_get_features_data(nvme_link_t l, enum nvme_features_id fi
 		.result = result,
 		.data = data,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.sel = NVME_GET_FEATURES_SEL_CURRENT,
 		.cdw11 = 0,
@@ -3752,7 +3750,6 @@ static inline int nvme_directive_send_stream_release_identifier(nvme_link_t l,
 		.result = NULL,
 		.data = NULL,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_SEND_STREAMS_DOPER_RELEASE_IDENTIFIER,
 		.dtype = NVME_DIRECTIVE_DTYPE_STREAMS,
@@ -3778,7 +3775,6 @@ static inline int nvme_directive_send_stream_release_resource(nvme_link_t l, __u
 		.result = NULL,
 		.data = NULL,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_SEND_STREAMS_DOPER_RELEASE_RESOURCE,
 		.dtype = NVME_DIRECTIVE_DTYPE_STREAMS,
@@ -3816,7 +3812,6 @@ static inline int nvme_directive_recv_identify_parameters(nvme_link_t l, __u32 n
 		.result = NULL,
 		.data = id,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_RECEIVE_IDENTIFY_DOPER_PARAM,
 		.dtype = NVME_DIRECTIVE_DTYPE_IDENTIFY,
@@ -3844,7 +3839,6 @@ static inline int nvme_directive_recv_stream_parameters(nvme_link_t l, __u32 nsi
 		.result = NULL,
 		.data = parms,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_RECEIVE_STREAMS_DOPER_PARAM,
 		.dtype = NVME_DIRECTIVE_DTYPE_STREAMS,
@@ -3879,7 +3873,6 @@ static inline int nvme_directive_recv_stream_status(nvme_link_t l, __u32 nsid,
 		.result = NULL,
 		.data = id,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_RECEIVE_STREAMS_DOPER_STATUS,
 		.dtype = NVME_DIRECTIVE_DTYPE_STREAMS,
@@ -3908,7 +3901,6 @@ static inline int nvme_directive_recv_stream_allocate(nvme_link_t l, __u32 nsid,
 		.result = result,
 		.data = NULL,
 		.args_size = sizeof(args),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.nsid = nsid,
 		.doper = NVME_DIRECTIVE_RECEIVE_STREAMS_DOPER_RESOURCE,
 		.dtype = NVME_DIRECTIVE_DTYPE_STREAMS,
@@ -4653,7 +4645,6 @@ static inline int nvme_fdp_reclaim_unit_handle_status(nvme_link_t l, __u32 nsid,
 		.args_size = sizeof(args),
 		.nsid = nsid,
 		.data_len = data_len,
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.mos = 0,
 		.mo = NVME_IO_MGMT_RECV_RUH_STATUS,
 	};
@@ -4689,7 +4680,6 @@ static inline int nvme_fdp_reclaim_unit_handle_update(nvme_link_t l, __u32 nsid,
 		.args_size = sizeof(args),
 		.nsid = nsid,
 		.data_len = (__u32)(npids * sizeof(__u16)),
-		.timeout = NVME_DEFAULT_IOCTL_TIMEOUT,
 		.mos = (__u16)(npids - 1),
 		.mo = NVME_IO_MGMT_SEND_RUH_UPDATE,
 	};
@@ -4728,7 +4718,6 @@ int nvme_zns_mgmt_recv(nvme_link_t l, struct nvme_zns_mgmt_recv_args *args);
  * @partial:	Partial report requested
  * @data_len:	Length of the data buffer
  * @data:	Userspace address of the report zones data
- * @timeout:	timeout in ms
  * @result:	The command completion result from CQE dword0
  *
  * Return: 0 on success, the nvme command status if a response was
@@ -4737,15 +4726,13 @@ int nvme_zns_mgmt_recv(nvme_link_t l, struct nvme_zns_mgmt_recv_args *args);
 static inline int nvme_zns_report_zones(nvme_link_t l, __u32 nsid, __u64 slba,
 			  enum nvme_zns_report_options opts,
 			  bool extended, bool partial,
-			  __u32 data_len, void *data,
-			  __u32 timeout, __u32 *result)
+			  __u32 data_len, void *data, __u32 *result)
 {
 	struct nvme_zns_mgmt_recv_args args = {
 		.slba = slba,
 		.result = result,
 		.data = data,
 		.args_size = sizeof(args),
-		.timeout = timeout,
 		.nsid = nsid,
 		.zra = extended ? NVME_ZNS_ZRA_EXTENDED_REPORT_ZONES :
 		NVME_ZNS_ZRA_REPORT_ZONES,
